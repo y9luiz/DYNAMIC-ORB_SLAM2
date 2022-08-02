@@ -23,7 +23,9 @@
 
 #include <vector>
 #include <list>
-#include <opencv/cv.h>
+
+#include "opencv2/core/core_c.h"
+
 
 
 namespace ORB_SLAM2
@@ -87,7 +89,7 @@ public:
 protected:
 
     void ComputePyramid(cv::Mat image);
-    void ComputeKeyPointsOctTree(std::vector<std::vector<cv::KeyPoint> >& allKeypoints);    
+    void ComputeKeyPointsOctTree(std::vector<std::vector<cv::KeyPoint> >& allKeypoints, const cv::Mat& mask);
     std::vector<cv::KeyPoint> DistributeOctTree(const std::vector<cv::KeyPoint>& vToDistributeKeys, const int &minX,
                                            const int &maxX, const int &minY, const int &maxY, const int &nFeatures, const int &level);
 
