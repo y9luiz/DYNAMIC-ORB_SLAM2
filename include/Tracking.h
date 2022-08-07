@@ -37,6 +37,8 @@
 #include "Initializer.h"
 #include "MapDrawer.h"
 #include "System.h"
+#include "segmentation/geometric/scored_geometric_segmentation.h"
+
 
 #include <string>
 #include <mutex>
@@ -111,6 +113,9 @@ public:
     std::list<KeyFrame*> mlpReferences;
     std::list<double> mlFrameTimes;
     std::list<bool> mlbLost;
+
+    std::vector<int> m_dynamicPointIndexes;
+
 
     // True if local mapping is deactivated and we are performing only localization
     bool mbOnlyTracking;
@@ -216,6 +221,8 @@ protected:
     bool mbRGB;
 
     list<MapPoint*> mlpTemporalPoints;
+
+    ScoredGeometricSegmentation m_pointSegmentator;
 };
 
 } //namespace ORB_SLAM

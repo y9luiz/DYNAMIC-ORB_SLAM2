@@ -69,6 +69,8 @@ protected:
     Map* mpMap;
 
     std::mutex mMutex;
+
+    vector<int> m_dynamicPointsIndexes;
 };
 
 } //namespace ORB_SLAM

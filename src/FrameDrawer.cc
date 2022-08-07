@@ -92,8 +92,10 @@ cv::Mat FrameDrawer::DrawFrame()
         mnTrackedVO=0;
         const float r = 5;
         const int n = vCurrentKeys.size();
+        cout << "total de pontos dinamicos " << m_dynamicPointsIndexes.size() << "\n";
         for(int i=0;i<n;i++)
         {
+            bool isDynamicPoint = find(m_dynamicPointsIndexes.begin(),m_dynamicPointsIndexes.end(),i) != m_dynamicPointsIndexes.end();
             if(vbVO[i] || vbMap[i])
             {
                 cv::Point2f pt1,pt2;
@@ -105,15 +107,22 @@ cv::Mat FrameDrawer::DrawFrame()
                 // This is a match to a MapPoint in the map
                 if(vbMap[i])
                 {
-                    cv::rectangle(im,pt1,pt2,cv::Scalar(0,255,0));
+                    if(!isDynamicPoint)
+                         cv::rectangle(im,pt1,pt2,cv::Scalar(0,255,0));
                     cv::circle(im,vCurrentKeys[i].pt,2,cv::Scalar(0,255,0),-1);
                     mnTracked++;
                 }
                 else // This is match to a "visual odometry" MapPoint created in the last frame
                 {
-                    cv::rectangle(im,pt1,pt2,cv::Scalar(255,0,0));
+                    if(!isDynamicPoint)
+                        cv::rectangle(im,pt1,pt2,cv::Scalar(255,0,0));
                     cv::circle(im,vCurrentKeys[i].pt,2,cv::Scalar(255,0,0),-1);
                     mnTrackedVO++;
+                }
+
+                if(isDynamicPoint)
+                {
+                    cv::rectangle(im,pt1,pt2,cv::Scalar(0,0,255));
                 }
             }
         }
@@ -193,6 +202,8 @@ void FrameDrawer::Update(Tracking *pTracker)
     mvbVO = vector<bool>(N,false);
     mvbMap = vector<bool>(N,false);
     mbOnlyTracking = pTracker->mbOnlyTracking;
+
+    m_dynamicPointsIndexes = pTracker->m_dynamicPointIndexes;
 
 
     if(pTracker->mLastProcessedState==Tracking::NOT_INITIALIZED)

@@ -487,6 +487,10 @@ void Tracking::Track()
         if(!mCurrentFrame.mpReferenceKF)
             mCurrentFrame.mpReferenceKF = mpReferenceKF;
 
+        m_dynamicPointIndexes =  m_pointSegmentator.getDynamicPointsIndexes(&mCurrentFrame,&mLastFrame);
+
+        cout << m_dynamicPointIndexes.size() << endl;
+
         mLastFrame = Frame(mCurrentFrame);
     }
 
