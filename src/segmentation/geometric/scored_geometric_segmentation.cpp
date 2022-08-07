@@ -144,15 +144,16 @@ vector<cv::Point2f> ScoredGeometricSegmentation::projectLastPointsIntoCurrentFra
         }
 
 
-        cv::Mat poseLastFrame = m_lastFrame->mvpMapPoints[i]->GetWorldPos();
-        cv::Mat poseLastFrameTransformed = currentFrameRotation*poseLastFrame + currentFrameTranslation; 
+        cv::Mat point3DFromLastFrameWorldCoordinates = m_lastFrame->mvpMapPoints[i]->GetWorldPos();
+        cv::Mat point3DFromLastFrameWorldCoordinatesTransformed = currentFrameRotation*point3DFromLastFrameWorldCoordinates + currentFrameTranslation; 
 
-        const auto x = poseLastFrameTransformed.at<float>(0);
-        const auto y = poseLastFrameTransformed.at<float>(1);
-        const float inverseZ = 1.0/poseLastFrameTransformed.at<float>(2);
+        const auto x = point3DFromLastFrameWorldCoordinatesTransformed.at<float>(0);
+        const auto y = point3DFromLastFrameWorldCoordinatesTransformed.at<float>(1);
+        const float inverseZ = 1.0/point3DFromLastFrameWorldCoordinatesTransformed.at<float>(2);
         
         isValidPoint = inverseZ >= 0;
 
+        // from point projected into the current frame
         float u = isValidPoint? m_currentFrame->fx*x*inverseZ+m_currentFrame->cx: -1;
         float v = isValidPoint? m_currentFrame->fy*y*inverseZ+m_currentFrame->cy: -1;
 
